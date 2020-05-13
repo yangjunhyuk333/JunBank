@@ -59,8 +59,8 @@ void withdraw() {
 	cin >> withdrawAmount;
 
 	for (int i = 0; i < Member_Number; i++) {
-		if (account[Member_Number].accId == checkAccId) {
-			account[Member_Number].balance -= withdrawAmount;
+		if (account[i].accId == checkAccId) {
+			account[i].balance -= withdrawAmount;
 		}
 		else {
 			cout << "유효하지 않은 ID 입니다." << endl;
