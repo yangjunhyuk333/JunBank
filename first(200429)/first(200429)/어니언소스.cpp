@@ -3,7 +3,7 @@
 using namespace std;
 
 typedef struct {
-	string accId;
+	int accId;
 	int balance;
 	char cusName[20];
 }Account;
@@ -29,7 +29,7 @@ void creatAccount() {
 
 void deposit() {
 	int depositInput;
-	string checkAccId;
+	int checkAccId;
 
 	cout << "[입금]" << endl;
 	cout << "ID: ";
@@ -50,7 +50,7 @@ void deposit() {
 
 void withdraw() {
 	int withdrawAmount;
-	string checkAccId;
+	int checkAccId;
 
 	cout << "[출금]" << endl;
 	cout << "ID: " << endl;
