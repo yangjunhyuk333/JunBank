@@ -3,33 +3,78 @@
 using namespace std;
 
 typedef struct {
-	int accId;
+	string accId;
 	int balance;
 	char cusName[20];
 }Account;
 
+Account* account = new Account[100];
+int Member_Number = 0;
+
 void creatAccount() {
-	Account* account = new Account[100];
+	Account User;
 
 	cout << "[계좌개설]" << endl;
 	cout << "계좌ID:  ";
-	cin >> account -> accId;
+	cin >> User.accId;
 	cout << "이  름: ";
-	cin >> account -> cusName;
+	cin >> User.cusName;
 	cout << "입금액: ";
-	cin >> account -> balance;
+	cin >> User.balance;
+
+	account[Member_Number] = User;
+
+	Member_Number++;
 }
 
 void deposit() {
-	printf("입금");
+	int depositInput;
+	string checkAccId;
+
+	cout << "[입금]" << endl;
+	cout << "ID: ";
+	cin >> checkAccId;
+	cout << "입금액: ";
+	cin >> depositInput;
+
+	for (int i = 0; i < Member_Number; i++) {
+		if (account[i].accId == checkAccId) {
+			account[i].balance += depositInput;
+		}
+		else {
+			cout << "유효하지 않은 ID 입니다." << endl;
+		}
+	}
+	cout << endl;
 }
 
 void withdraw() {
-	printf("출금");
+	int withdrawAmount;
+	string checkAccId;
+
+	cout << "[출금]" << endl;
+	cout << "ID: " << endl;
+	cin >> checkAccId;
+	cout << "얼마를 출금하시겠습니까?" << endl;
+	cin >> withdrawAmount;
+
+	for (int i = 0; i < Member_Number; i++) {
+		if (account[Member_Number].accId == checkAccId) {
+			account[Member_Number].balance -= withdrawAmount;
+		}
+		else {
+			cout << "유효하지 않은 ID 입니다." << endl;
+		}
+	}
+	cout << endl;
 }
 
 void accountPrint() {
-	printf("고객 전체 출력");
+	for (int i = 0; i < Member_Number; i++) {
+		cout << "계좌ID: " << account[i].accId << endl;
+		cout << "이  름: " << account[i].cusName << endl;
+		cout << "잔  액: " << account[i].balance << endl;
+	}
 }
 
 int main() {
