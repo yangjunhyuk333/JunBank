@@ -11,8 +11,6 @@ using namespace std;
 //}Account;
 
 class Account {
-public:
-	int length; //cusName의 길이를 받아오는 변수
 
 private:
 	int accID;
@@ -21,6 +19,7 @@ private:
 	char* cusName;
 
 public:
+	//생성자 아이디, 금액, 주민등록번호, 이름
 	Account(int accID, int balance, int Resident_registration_number, char* cusName)
 	{
 		this->accID = accID;
@@ -30,20 +29,24 @@ public:
 		strcpy_s(this->cusName, MAX_LEN, cusName);
 	}
 
+	//소멸자
 	~Account() {
 		cout << "객체가 삭제됩니다." << endl;
 
 		delete[] cusName;
 	}
 
+	//입금
 	void Deposit(int balance) {
 		this->balance += balance;
 	}
 
+	//계좌 확인
 	bool CheckAccount(int accountId) {
 		return this->accID == accountId;
 	}
 
+	//출금
 	bool Withdraw(int balance) {
 		if (this->balance < balance) {
 			return false;
@@ -53,6 +56,7 @@ public:
 		return true;
 	}
 
+	//계좌 전체 출력
 	void PrintAccount() {
 		cout << "계좌ID: " << accID << endl;
 		cout << "이  름: " << cusName << endl;
@@ -60,22 +64,18 @@ public:
 		cout << endl;
 	}
 
+	//주민등록번호 확인
 	bool Check_SSN(int Resident_registration_number) {
 		return this->Resident_registration_number == Resident_registration_number;
 	}
 
-	void Print_Account_Information() {
-		cout << "계좌ID: " << accID << endl;
-		cout << "이  름: " << cusName << endl;
-		cout << "잔  액: " << balance << endl;
-		cout << endl;
-	}
-
 };
 
+//객체 생성
 Account* account[100];
-int Member_Number = 0;
+int Member_Number = 0; //멤버 개수 카운트
 
+//계좌 생성 함수
 void creatAccount() {
 	int accountId;
 	int accountBalance;
@@ -107,6 +107,7 @@ void creatAccount() {
 	cout << endl;
 }
 
+//입금 함수
 void deposit() {
 	int depositInput = 0;
 	int checkAccId;
@@ -129,6 +130,7 @@ void deposit() {
 
 }
 
+//출금 함수
 void withdraw() {
 	int withdrawAmount = 0;
 	int checkAccId;
@@ -151,6 +153,7 @@ void withdraw() {
 
 }
 
+//출력 함수
 void Printaccount() {
 	for (int i = 0; i < Member_Number; i++) {
 		cout << endl;
@@ -158,6 +161,7 @@ void Printaccount() {
 	}
 }
 
+//메인 함수
 int main() {
 	while (1) {
 		int input = 0;
