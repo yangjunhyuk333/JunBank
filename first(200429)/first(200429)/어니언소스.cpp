@@ -3,6 +3,7 @@
 using namespace std;
 
 #define MAX_LEN 20
+#define MAX_MEMBER 100
 
 //typedef struct {
 //	int accId;
@@ -36,13 +37,27 @@ public:
 		delete[] cusName;
 	}
 
+	//복사 생성자
+	Account(const Account& copy_user)
+		: accID(copy_user.accID), Resident_registration_number(copy_user.Resident_registration_number)
+	{
+		cout << "복사 생성자 호출" << endl;
+		this->balance = copy_user.balance;
+		this->cusName = new char[MAX_LEN];
+		strcpy_s(this->cusName, MAX_LEN, copy_user.cusName);
+	}
+
+	char *getAccountMember() const{
+		return cusName;
+	}
+
 	//입금
 	void Deposit(int balance) {
 		this->balance += balance;
 	}
 
 	//계좌 확인
-	bool CheckAccount(int accountId) {
+	bool CheckAccount(int accountId) const {
 		return this->accID == accountId;
 	}
 
@@ -57,7 +72,7 @@ public:
 	}
 
 	//계좌 전체 출력
-	void PrintAccount() {
+	void PrintAccount() const {
 		cout << "계좌ID: " << accID << endl;
 		cout << "이  름: " << cusName << endl;
 		cout << "잔  액: " << balance << endl;
@@ -71,95 +86,134 @@ public:
 
 };
 
-//객체 생성
-Account* account[100];
-int Member_Number = 0; //멤버 개수 카운트
+class AccountManager {
 
-//계좌 생성 함수
-void creatAccount() {
-	int accountId;
-	int accountBalance;
-	char accountName[20];
-	int Resident_registration_number;
+public:
+	//객체 생성
+	Account* account[MAX_MEMBER];
+	int Member_Number = 0; //멤버 개수 카운트
 
-	cout << "[계좌개설]" << endl;
-	cout << "계좌ID:  ";
-	cin >> accountId;
-	cout << "이  름: ";
-	cin >> accountName;
-	cout << "입금액: ";
-	cin >> accountBalance;
-	//최소 입금 금액 확인
-	if (accountBalance < 10) {
-		cout << "최소 입금 금액은 10원입니다." << endl;
+	//계좌 생성 함수
+	void creatAccount() {
+		int accountId;
+		int accountBalance;
+		char accountName[20];
+		int Resident_registration_number;
+
+		cout << "[계좌개설]" << endl;
+		cout << "계좌ID:  ";
+		cin >> accountId;
+		cout << "이  름: ";
+		cin >> accountName;
 		cout << "입금액: ";
 		cin >> accountBalance;
-	}
-
-	cout << "주민등록번호: ";
-	cin >> Resident_registration_number;
-
-	account[Member_Number] = new Account(accountId, accountBalance,
-		Resident_registration_number, accountName);
-
-	Member_Number++;
-
-	cout << endl;
-}
-
-//입금 함수
-void deposit() {
-	int depositInput = 0;
-	int checkAccId;
-
-	cout << "[입금]" << endl;
-	cout << "ID: ";
-	cin >> checkAccId;
-	for (int i = 0; i < Member_Number; i++) {
-		if (account[i]->CheckAccount(checkAccId)) {
+		//최소 입금 금액 확인
+		if (accountBalance < 10) {
+			cout << "최소 입금 금액은 10원입니다." << endl;
 			cout << "입금액: ";
-			cin >> depositInput;
-			cout << endl;
-			account[i]->Deposit(depositInput);
+			cin >> accountBalance;
 		}
-		else {
-			cout << "유효하지 않은 ID 입니다." << endl;
-			return;
-		}
-	}
 
-}
+		cout << "주민등록번호: ";
+		cin >> Resident_registration_number;
 
-//출금 함수
-void withdraw() {
-	int withdrawAmount = 0;
-	int checkAccId;
+		account[Member_Number] = new Account(accountId, accountBalance,
+			Resident_registration_number, accountName);
 
-	cout << "[출금]" << endl;
-	cout << "ID: ";
-	cin >> checkAccId;
-	for (int i = 0; i < Member_Number; i++) {
-		if (account[i]->CheckAccount(checkAccId)) {
-			cout << "얼마를 출금하시겠습니까?" << endl;
-			cin >> withdrawAmount;
-			cout << endl;
-			account[i]->Withdraw(withdrawAmount);
-		}
-		else {
-			cout << "유효하지 않은 ID 입니다." << endl;
-			return;
-		}
-	}
+		Member_Number++;
 
-}
-
-//출력 함수
-void Printaccount() {
-	for (int i = 0; i < Member_Number; i++) {
 		cout << endl;
-		account[i]->PrintAccount();
 	}
-}
+
+	//입금 함수
+	void deposit() const {
+		int depositInput = 0;
+		int checkAccId;
+		char* memberList[MAX_MEMBER];
+		int AccCheck_SSN = 0;
+
+		cout << "[입금]" << endl;
+		cout << "ID: ";
+		cin >> checkAccId;
+		for (int i = 0; i < Member_Number; i++) {
+			if (account[i]->CheckAccount(checkAccId)) {
+				for (int j = 0; j < Member_Number; j++) {
+					for (int k = 0; k < Member_Number; k++) {
+						memberList[k] = account[k]->getAccountMember();
+					}
+					if (memberList[i] == memberList[j]) {
+						cout << "이름이 같은 사람이 있음" << endl;
+						cout << "주민등록번호 입력: ";
+						cin >> AccCheck_SSN;
+						cout << endl;
+
+						if (account[i]->Check_SSN(AccCheck_SSN)) {
+							cout << "입금액: ";
+							cin >> depositInput;
+							cout << endl;
+							account[i]->Deposit(depositInput);
+							return;
+						}
+					}
+				}
+			}
+			else {
+				cout << "유효하지 않은 ID 입니다." << endl;
+				return;
+			}
+
+		}
+	}
+
+	//출금 함수
+	void withdraw() const {
+		int withdrawAmount = 0;
+		int checkAccId;
+		char* memberList[MAX_MEMBER];
+		int AccCheck_SSN = 0;
+
+		cout << "[출금]" << endl;
+		cout << "ID: ";
+		cin >> checkAccId;
+		for (int i = 0; i < Member_Number; i++) {
+			if (account[i]->CheckAccount(checkAccId)) {
+				for (int j = 0; j < Member_Number; j++) {
+					for (int k = 0; k < Member_Number; k++) {
+						memberList[k] = account[k]->getAccountMember();
+					}
+					if (memberList[i] == memberList[j]) {
+						cout << "이름이 같은 사람이 있음" << endl;
+						cout << "주민등록번호 입력: ";
+						cin >> AccCheck_SSN;
+						cout << endl;
+					}
+					if (account[i]->Check_SSN(AccCheck_SSN)) {
+						cout << "얼마를 출금하시겠습니까?" << endl;
+						cin >> withdrawAmount;
+						cout << endl;
+						account[i]->Withdraw(withdrawAmount);
+						return;
+					}
+				}
+			}
+			else {
+				cout << "유효하지 않은 ID 입니다." << endl;
+				return;
+			}
+		}
+
+	}
+
+	//출력 함수
+	void Printaccount() const{
+		for (int i = 0; i < Member_Number; i++) {
+			cout << endl;
+			account[i]->PrintAccount();
+		}
+	}
+};
+
+AccountManager accountManager;
 
 //메인 함수
 int main() {
@@ -171,23 +225,27 @@ int main() {
 
 		switch (input) {
 		case 1:
-			creatAccount();
+			accountManager.creatAccount();
 			break;
 		case 2:
-			deposit();
+			accountManager.deposit();
 			break;
 		case 3:
-			withdraw();
+			accountManager.withdraw();
 			break;
 		case 4:
-			Printaccount();
+			accountManager.Printaccount();
 			break;
 		case 5:
 			cout << "프로그램 종료" << endl;
-			for (int i = 0; i < Member_Number; i++) delete account[i];
+			for (int i = 0; i < accountManager.Member_Number; i++) {
+				delete accountManager.account[i];
+			}
 			return 0;
+		case 6:
+			
 		default:
-			printf("6부터는 적으면 안돼! 바로 종료!!");
+			printf("7부터는 적으면 안돼! 바로 종료!!");
 		}
 	}
 }
