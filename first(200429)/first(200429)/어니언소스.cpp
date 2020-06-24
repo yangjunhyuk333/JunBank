@@ -5,6 +5,7 @@ using namespace std;
 #define MAX_LEN 20
 #define MAX_MEMBER 100
 
+//과거의 나의 행적
 //typedef struct {
 //	int accId;
 //	int balance;
@@ -108,10 +109,15 @@ public:
 		cout << "입금액: ";
 		cin >> accountBalance;
 		//최소 입금 금액 확인
-		if (accountBalance < 10) {
-			cout << "최소 입금 금액은 10원입니다." << endl;
-			cout << "입금액: ";
-			cin >> accountBalance;
+		while (1) {
+			if (accountBalance < 10) {
+				cout << "최소 입금 금액은 10원입니다." << endl;
+				cout << "입금액: ";
+				cin >> accountBalance;
+			}
+			else {
+				break;
+			}
 		}
 
 		cout << "주민등록번호: ";
@@ -127,10 +133,10 @@ public:
 
 	//입금 함수
 	void deposit() const {
-		int depositInput = 0;
-		int checkAccId;
-		char* memberList[MAX_MEMBER];
-		int AccCheck_SSN = 0;
+		int depositInput = 0; //입금 금액
+		int checkAccId; //아이디 입력 받는 변수
+		char* memberList[MAX_MEMBER]; //멤버들의 이름 목록을 받아오는 배열
+		int AccCheck_SSN = 0; //주민등록번호를 입력 받는 변수
 
 		cout << "[입금]" << endl;
 		cout << "ID: ";
@@ -141,12 +147,15 @@ public:
 					for (int k = 0; k < Member_Number; k++) {
 						memberList[k] = account[k]->getAccountMember();
 					}
+					//이름 같은 사람이 있는지 검사
+					//있다면 주민등록번호 받기
 					if (memberList[i] == memberList[j]) {
 						cout << "이름이 같은 사람이 있음" << endl;
 						cout << "주민등록번호 입력: ";
 						cin >> AccCheck_SSN;
 						cout << endl;
 
+						//해당 주민등록번호를 가진 사람이 있으면 입금
 						if (account[i]->Check_SSN(AccCheck_SSN)) {
 							cout << "입금액: ";
 							cin >> depositInput;
@@ -157,6 +166,7 @@ public:
 					}
 				}
 			}
+			//없으면 return
 			else {
 				cout << "유효하지 않은 ID 입니다." << endl;
 				return;
@@ -167,10 +177,10 @@ public:
 
 	//출금 함수
 	void withdraw() const {
-		int withdrawAmount = 0;
-		int checkAccId;
-		char* memberList[MAX_MEMBER];
-		int AccCheck_SSN = 0;
+		int withdrawAmount = 0; //출금 금액
+		int checkAccId; //아이디 입력 받는 변수
+		char* memberList[MAX_MEMBER]; //멤버들의 이름 목록을 받아오는 배열
+		int AccCheck_SSN = 0; //주민등록번호를 입력 받는 변수
 
 		cout << "[출금]" << endl;
 		cout << "ID: ";
@@ -181,12 +191,15 @@ public:
 					for (int k = 0; k < Member_Number; k++) {
 						memberList[k] = account[k]->getAccountMember();
 					}
+					//이름 같은 사람이 있는지 검사
+					//있다면 주민등록번호 받기
 					if (memberList[i] == memberList[j]) {
 						cout << "이름이 같은 사람이 있음" << endl;
 						cout << "주민등록번호 입력: ";
 						cin >> AccCheck_SSN;
 						cout << endl;
 					}
+					//해당 주민등록번호를 가진 사람이 있으면 출금
 					if (account[i]->Check_SSN(AccCheck_SSN)) {
 						cout << "얼마를 출금하시겠습니까?" << endl;
 						cin >> withdrawAmount;
@@ -196,6 +209,7 @@ public:
 					}
 				}
 			}
+			//없으면 return
 			else {
 				cout << "유효하지 않은 ID 입니다." << endl;
 				return;
@@ -213,6 +227,7 @@ public:
 	}
 };
 
+//AccountManager 객체 생성
 AccountManager accountManager;
 
 //메인 함수
@@ -242,10 +257,8 @@ int main() {
 				delete accountManager.account[i];
 			}
 			return 0;
-		case 6:
-			
 		default:
-			printf("7부터는 적으면 안돼! 바로 종료!!");
+			printf("6부터는 적으면 안돼! 바로 종료!!");
 		}
 	}
 }
