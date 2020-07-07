@@ -166,6 +166,7 @@ public:
 
 };
 
+//계좌 관리 클래스
 class AccountManager {
 
 public:
