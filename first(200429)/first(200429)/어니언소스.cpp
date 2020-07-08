@@ -176,7 +176,7 @@ public:
 	int Member_Number = 0; //멤버 개수 카운트
 
 	//어떤 계좌에서 작업을 할 지 선택하는 함수
-	int checkAccountType() {
+	int CheckAccountType() {
 		int selectType;
 
 		cout << "어떤 계좌에서 작업하시겠습니까?\n1. 보통 계좌 \n2. 예금 계좌" << endl;
@@ -195,7 +195,7 @@ public:
 		default:
 			cout << "숫자를 잘못 입력하셨습니다." << endl;
 			cout << endl;
-			checkAccountType();
+			CheckAccountType();
 		}
 	}
 
@@ -239,11 +239,11 @@ public:
 	}
 
 	//계좌 생성
-	void createAccount() {
+	void CreateAccount() {
 		cout << endl;
 		cout << "[계좌개설]" << endl;
 
-		int checkType = checkAccountType();
+		int checkType = CheckAccountType();
 
 		if (checkType == 1) {
 			CreateOrdinaryAccount();
@@ -255,7 +255,7 @@ public:
 			cout << endl;
 			cout << "잘못 선택하셨습니다." << endl;
 			cout << endl;
-			createAccount();
+			CreateAccount();
 			cout << endl;
 		}
 	}
@@ -396,7 +396,7 @@ public:
 	}
 
 	//계좌 입금
-	void deposit() {
+	void Deposit() {
 		int inputId; //ID입력
 		int amountBalance; //입금할 금액
 		int selectId_idx; //ID 인덱스
@@ -445,7 +445,7 @@ public:
 	}
 
 	//계좌 출금
-	void withdraw() {
+	void Withdraw() {
 		int inputId; //ID입력
 		int amountBalance; //입금할 금액
 		int selectId_idx; //ID 인덱스
@@ -521,17 +521,17 @@ int main() {
 
 		switch (input) {
 		case 1:
-			accountManager.createAccount();
+			accountManager.CreateAccount();
 
 			break;
 
 		case 2:
-			accountManager.deposit();
+			accountManager.Deposit();
 			
 			break;
 
 		case 3:
-			accountManager.withdraw();
+			accountManager.Withdraw();
 			
 			break;
 
