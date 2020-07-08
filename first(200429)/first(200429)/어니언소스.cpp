@@ -341,18 +341,19 @@ public:
 		int ordinaryId_idx = 0; //원본 ID 인덱스 받아오기
 		int inputId = 0; //ID 입력
 		int amountBalance = 0; //입금액 입력
+		bool checkParam;
 
 		//원본 계좌 입력
 		cout << endl;
 		cout << "원본 계좌: ";
-		cin >> inputOrdinaryId; 
-
-		//원본 계좌 인덱스 저장
-		ordinaryId_idx = CheckAccId_idx(inputOrdinaryId);
+		cin >> inputOrdinaryId;
 
 		while (1) {
+			//ID검사
+			checkParam = CheckAccId(inputOrdinaryId);
+
 			//원본 계좌 검색(검사)
-			if (CheckAccId(inputOrdinaryId) == false) { //존재하지 않으면 다시 입력
+			if (checkParam != true) { //존재하지 않으면 다시 입력
 				cout << endl;
 				cout << "원본 계좌가 존재하지 않습니다." << endl;
 				cout << "원본 계좌: ";
@@ -361,12 +362,13 @@ public:
 				continue;
 			}
 			else {
+				//원본 계좌 인덱스 저장
+				ordinaryId_idx = CheckAccId_idx(inputOrdinaryId);
 				break;
 			}
 		}
 
 		//계좌ID 입력
-		cout << endl;
 		cout << "계좌ID: ";
 		cin >> inputId;
 
